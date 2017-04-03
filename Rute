@@ -1,1 +1,6 @@
-int nummer;
+private int nummer;
+private char type;
+private booelan opptatt;
+private iRute;
+
+public Rute(){
