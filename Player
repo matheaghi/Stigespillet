@@ -1,1 +1,7 @@
+//Skriver her nå
+String name;
+int playerNumber;
+Brikke brikke;
+Rute inRute;
+boolean pause = False;
 
