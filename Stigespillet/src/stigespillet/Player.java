@@ -8,10 +8,9 @@ public class Player {
 	private boolean pause = false;
 	
 	
-	public Player(String name, int playerNr, Rute iRute){
+	public Player(String name, int playerNr){
 		this.name = name;
 		this.playerNr = playerNr;
-		this.iRute = iRute;
 	}
 	
 	public String getName(){
@@ -28,4 +27,5 @@ public class Player {
 	public boolean getPause(){
 		return this.pause;
 	}
+	
 }
