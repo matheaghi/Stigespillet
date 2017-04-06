@@ -8,10 +8,10 @@ public class Player {
 	private boolean pause = false;
 	
 	
-	public Player(){
-		
-		
-		
+	public Player(String name, int playerNr, Rute iRute){
+		this.name = name;
+		this.playerNr = playerNr;
+		this.iRute = iRute;
 	}
 	
 	public String getName(){
