@@ -1,4 +1,4 @@
-package Stigespillet;
+package stigespillet;
 
 public class Brett {
 
