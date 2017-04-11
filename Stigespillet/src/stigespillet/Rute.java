@@ -34,11 +34,25 @@ public class Rute {
 			opptatt = false;
 		}
 	}
-	
-	public void setPlayer(Player player, Rute forrige_rute){
-		if(this.player != null){
-			this.player.
+	public boolean isOpptatt(){
+		if (opptatt){
+			return true;
 		}
+		else{
+			return false;
+		}
+	}
+	
+	public void setPlayer(Player player){
+		this.player = player;
+	}
+	
+	/*public Rute getRute(){
+		return this;
+	}*/
+	
+	public int getNummer(){
+		return this.nummer;
 	}
 	
 	

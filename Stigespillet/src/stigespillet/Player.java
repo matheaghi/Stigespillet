@@ -4,7 +4,7 @@ public class Player {
 
 	private String name;
 	private int playerNr;
-	private Rute iRute;
+	private Rute iRute /* index, ikke nummeret på brettet*/;
 	private boolean pause = false;
 	
 	
@@ -26,6 +26,9 @@ public class Player {
 	}
 	public boolean getPause(){
 		return this.pause;
+	}
+	public void setIRute(Rute rute){
+		this.iRute = rute;
 	}
 	
 }
