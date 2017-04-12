@@ -21,7 +21,7 @@ Legger også til .1 s delay så tallene blir vist, dette må vi sjekke om er rik
 
 
 	public static void main(String[] args) {
-		Dicee dice = new Dicee();
+		Dice dice = new Dice();
 		for (int i = 0; i < 17; i++) {
 			System.out.println(dice.showNumber());
 		}

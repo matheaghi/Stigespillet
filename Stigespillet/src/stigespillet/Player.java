@@ -33,4 +33,8 @@ public class Player {
 		this.iRute = rute;
 	}
 	
+	public void setPause(boolean some){
+		pause = some;
+	}
+	
 }

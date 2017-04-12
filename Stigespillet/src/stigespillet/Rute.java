@@ -56,6 +56,11 @@ public class Rute {
 		return this.nummer;
 	}
 	
+	public Player getPlayer(){
+		return this.player;
+	}
+
+	
 	
 	public static void main(String[] args) {
 		Rute rute = new Rute();

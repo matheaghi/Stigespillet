@@ -22,7 +22,7 @@ public class Brett {
 		
 		//Hvis terningkastet forer til at spillerens plasering gar over 100 er spillet ferdig. 
 		if ((spiller.getIRute().getNummer() + diceShows) >= 100){
-			this.isGameOver = ture;
+			this.isGameOver = true;
 		}
 		
 		int newRuteIndex = spiller.getIRute().getNummer() - 1 + diceShows;
@@ -33,21 +33,70 @@ public class Brett {
 			oldRute.setPlayer(null);
 			spiller.setIRute(newRute);
 		}else if (newRute.isOpptatt()) {
-			
-	}	
+			fixOpptatt(spiller, newRute);
+		}
+	}
+		
+	private void fixOpptatt(Player sinTur, Rute oldRute){
+		Rute newRute = brettet.get(oldRute.getNummer() - 2);
+		oldRute.setPlayer(null);
+		if (newRute.isOpptatt()) {
+			fixOpptatt(newRute.getPlayer(), newRute);
+		}
+		else{
+			newRute.setPlayer(sinTur);
+			oldRute.setPlayer(null);
+			sinTur.setIRute(newRute);
+		}
+	}
+	
+	
+	public void executeRute(Rute rute){
+		
+	}
 		
 		
 	public void playGame(){
 		//initialize();
 		while (!isGameOver){
 			for (Player spiller: this.spillere){
+				sinTur = spiller;
+				if (sinTur.getPause()){
+					sinTur.setPause(false);
+					continue;
+				}
+				else{
+				System.out.println("Det er " + spiller + " sin tur.");
 				movePlayer(spiller);
+				}
 			}
 		}
 			
 		
 	}
 	
+	//Rykk ned
+	public void rødRute(){
+		
+	}
 	
+	//Rykk opp
+	public void grønnRute(){
+		
+	}
 	
+	//Stå over en runde
+	public void oransjeRute(){
+		sinTur.setPause(true);
+	}
+	
+	//Velg noen som må stå over
+	public void svartRute(){
+		
+	}
+	
+	//Enten opp eller ned
+	public void blåRute(){
+		
+	}
 }	
