@@ -15,33 +15,38 @@ public class Brett {
 	
 	Dice dice = new Dice();
 	
-/*
-	public Brett(int antallSpillere){
-		this.sinTur = 1;
-		Player sp;
-		for (int i = 0; i < antallSpillere; i++){
-			sp = new Player(name, playerNr);
-			spillere.add(sp);
-		}
-	}
-	*/
-	
 	
 	//movePlayer
-	public void movePlayer() {
-		diceShows = dice.throw_dice();
-		int newRuteIndex = sinTur.getIRute().getNummer() - 1 + diceShows;
-		Rute oldRute = sinTur.getIRute();
+	public void movePlayer(Player spiller) {
+		diceShows = this.dice.throw_dice();
+		
+		//Hvis terningkastet forer til at spillerens plasering gar over 100 er spillet ferdig. 
+		if ((spiller.getIRute().getNummer() + diceShows) >= 100){
+			this.isGameOver = ture;
+		}
+		
+		int newRuteIndex = spiller.getIRute().getNummer() - 1 + diceShows;
+		Rute oldRute = spiller.getIRute();
 		Rute newRute = brettet.get(newRuteIndex);
 		if (!(newRute.isOpptatt())) {
-		newRute.setPlayer(sinTur);
-		oldRute.setPlayer(null);
-		sinTur.setIRute(newRute);
-		}
-		else if (newRute.isOpptatt()) {
+			newRute.setPlayer(spiller);
+			oldRute.setPlayer(null);
+			spiller.setIRute(newRute);
+		}else if (newRute.isOpptatt()) {
 			
-		}
 	}	
+		
+		
+	public void playGame(){
+		//initialize();
+		while (!isGameOver){
+			for (Player spiller: this.spillere){
+				movePlayer(spiller);
+			}
+		}
+			
+		
+	}
 	
 	
 	

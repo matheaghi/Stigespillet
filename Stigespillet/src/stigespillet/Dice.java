@@ -1,28 +1,17 @@
 package stigespillet;
 
-import java.util.Random;
-
 public class Dice {
-private int nummer;
-Random random = new Random();
+	private int nummer;
 
-public int showNumber() {
-	try {
-	    Thread.sleep(100);
-	} catch(InterruptedException ex) {
-	    Thread.currentThread().interrupt();
+	public int showNumber() {
+		int random = (int )(Math.random() * 6 + 1);
+		return random;
 	}
-	return random.nextInt(6) + 1;
-}
 
-public int throw_dice() {
-	try {
-	    Thread.sleep(100);
-	} catch(InterruptedException ex) {
-	    Thread.currentThread().interrupt();
-	}
-	this.nummer = random.nextInt(5) + 1;
-	return nummer;
+	public int throw_dice() {
+		int random = (int )(Math.random() * 6 + 1);
+		this.nummer = random;
+		return random;
 	}
 
 /*Tanken er at man fra brett må bruke en for-løkke og gjennomføre mange showNumber, deretter én throw_dice som både printer
@@ -31,13 +20,14 @@ Legger også til .1 s delay så tallene blir vist, dette må vi sjekke om er rik
 
 
 
-public static void main(String[] args) {
-	Dice dice = new Dice();
-	for (int i = 0; i < 17; i++) {
-		System.out.println(dice.showNumber());
-	}
-	System.out.println(dice.throw_dice());
-	System.out.println("Tall:");
-	System.out.println(dice.nummer);
+	public static void main(String[] args) {
+		Dicee dice = new Dicee();
+		for (int i = 0; i < 17; i++) {
+			System.out.println(dice.showNumber());
+		}
+		System.out.println(dice.throw_dice());
+		System.out.println("Tall:");
+		System.out.println(dice.nummer);
+
 	}
 }

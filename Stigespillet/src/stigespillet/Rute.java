@@ -3,7 +3,8 @@ import java.security.spec.PSSParameterSpec;
 import java.util.*;
 
 public class Rute {
-	//mathea jobber her nå
+	
+	
 	private int nummer;
 	private char type;
 	private boolean opptatt;

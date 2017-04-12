@@ -24,9 +24,11 @@ public class Player {
 	public Rute getIRute(){
 		return this.iRute;
 	}
+	
 	public boolean getPause(){
 		return this.pause;
 	}
+	
 	public void setIRute(Rute rute){
 		this.iRute = rute;
 	}
