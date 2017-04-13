@@ -27,14 +27,6 @@ public class Rute {
 		}
 	}
 	
-	public void setOpptatt() {
-		if (player != null) {
-			opptatt = true;
-		}
-		else {
-			opptatt = false;
-		}
-	}
 	public boolean isOpptatt(){
 		if (opptatt){
 			return true;
@@ -46,6 +38,11 @@ public class Rute {
 	
 	public void setPlayer(Player player){
 		this.player = player;
+		if (player == null){
+			this.opptatt = false;
+		}else{
+			this.opptatt = true;
+		}
 	}
 	
 	/*public Rute getRute(){
