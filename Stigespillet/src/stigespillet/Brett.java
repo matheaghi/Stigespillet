@@ -155,7 +155,6 @@ public class Brett {
 			etterStige = rodRute(foerStige);
 		}else{
 			etterStige = gronnRute(foerStige, spiller);
-		
 		return etterStige;
 	}
 }	
