@@ -29,6 +29,8 @@ public class Brett {
 		Rute oldRute = spiller.getIRute();
 		Rute newRute = brettet.get(newRuteIndex);
 		
+		
+		//Sjekker og fikser hvis spilleren ender paa en spesiell rute
 		if(newRute.getType() == 'g'){
 			newRute = gronnRute(newRute, spiller);
 			
@@ -46,7 +48,7 @@ public class Brett {
 			oransjeRute(spiller);
 		}
 			
-		
+		//Sjekker og fikser hvis ruten er opptatt
 		if (!(newRute.isOpptatt())) {
 			newRute.setPlayer(spiller);
 			oldRute.setPlayer(null);
@@ -54,7 +56,11 @@ public class Brett {
 		}else {
 			fixOpptatt(spiller, newRute);
 			oldRute.setPlayer(null);
-	
+		}
+		
+		//Gjoer at spilleren kan kaste på nytt hvis den faar 6
+		if(diceShows == 6){
+			movePlayer(spiller);
 		}
 	}
 		//Sykt bra skreve. Æ gjor litt forandring, men det var kult med rekursivt kall :)
