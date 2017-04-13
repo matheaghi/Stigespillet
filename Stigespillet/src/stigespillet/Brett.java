@@ -6,19 +6,19 @@ import java.util.List;
 
 public class Brett {
 	
-	// endret sinTur til Player
+	
 	private Player sinTur;
 	private ArrayList<Rute> brettet;
 	private List<Player> spillere = new ArrayList<Player>();
 	private boolean isGameOver = false;
-	private int diceShows;
+	
 	
 	Dice dice = new Dice();
 	
 	
 	//movePlayer
 	public void movePlayer(Player spiller) {
-		diceShows = this.dice.throw_dice();
+		int diceShows = this.dice.throwDice();
 		
 		//Hvis terningkastet forer til at spillerens plasering gar over 100 er spillet ferdig. 
 		if ((spiller.getIRute().getNummer() + diceShows) >= 100){
@@ -34,19 +34,24 @@ public class Brett {
 			spiller.setIRute(newRute);
 		}else if (newRute.isOpptatt()) {
 			fixOpptatt(spiller, newRute);
+			oldRute.setPlayer(null);
+			oldRute.setOpptatt();
 		}
 	}
-		
+		//Sykt bra skreve. Det eneste jeg tenker paa er at naa er det spilleren som kaster som maa 
+		//rykke bakover hvis det er opptatt, men var ikke tanken at spilleren som stod der fra for
+		//skal gÂ en bakover?
 	private void fixOpptatt(Player sinTur, Rute oldRute){
 		Rute newRute = brettet.get(oldRute.getNummer() - 2);
-		oldRute.setPlayer(null);
+		Player staarHerFraFor = oldRute.getPlayer();
+		oldRute.setPlayer(sinTur);
 		if (newRute.isOpptatt()) {
-			fixOpptatt(newRute.getPlayer(), newRute);
+			fixOpptatt(staarHerFraFor, newRute);
 		}
-		else{
-			newRute.setPlayer(sinTur);
-			oldRute.setPlayer(null);
-			sinTur.setIRute(newRute);
+		newRute.setPlayer(staarHerFraFor);
+		oldRute.setPlayer(sinTur);
+		sinTur.setIRute(oldRute);
+		staarHerFraFor.setIRute(newRute);
 		}
 	}
 	
@@ -62,13 +67,12 @@ public class Brett {
 			for (Player spiller: this.spillere){
 				sinTur = spiller;
 				if (sinTur.getPause()){
+					System.out.println(spiller.getName() + " mÂ stÂ over denne runden. ");
 					sinTur.setPause(false);
 					continue;
 				}
-				else{
 				System.out.println("Det er " + spiller + " sin tur.");
 				movePlayer(spiller);
-				}
 			}
 		}
 			
@@ -76,12 +80,12 @@ public class Brett {
 	}
 	
 	//Rykk ned
-	public void r√∏dRute(){
+	public void rodRute(){
 		
 	}
 	
 	//Rykk opp
-	public void gr√∏nnRute(){
+	public void gronnRute(){
 		
 	}
 	
@@ -91,12 +95,12 @@ public class Brett {
 	}
 	
 	//Velg noen som m√• st√• over
-	public void svartRute(){
-		
+	public void svartRute(Player maaStaaOver){
+		maaStaaOver.setPause(true);
 	}
 	
 	//Enten opp eller ned
-	public void bl√•Rute(){
+	public void bloRute(){
 		
 	}
 }	
