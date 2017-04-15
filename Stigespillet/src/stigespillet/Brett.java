@@ -1,7 +1,9 @@
 package stigespillet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Brett {
@@ -11,10 +13,38 @@ public class Brett {
 	private ArrayList<Rute> brettet;
 	private List<Player> spillere = new ArrayList<Player>();
 	private boolean isGameOver = false;
+	private List<String> playerNames = new ArrayList<String>();
 	
 	
 	Dice dice = new Dice();
 	
+	
+	public Brett(List<Player> spillere){
+		for (Player player : spillere) {
+			playerNames.add(player.getName());
+		}
+		this.spillere = spillere;
+		for (int i = 0; i < 100; i++) {
+			brettet.add(new Rute(i));
+		}
+		int[] rÃ¸de_ruter = {20, 46, 71, 82, 97};
+		int[] grÃ¸nne_ruter = {5, 11, 22, 52, 60, 87, };
+		int[] oransje_ruter = {12, 41, 73, 95, 98};
+		for (int i : rÃ¸de_ruter) {
+			brettet.get(i).setType('r');
+		}
+		for (int j : grÃ¸nne_ruter) {
+			brettet.get(j).setType('g');
+		}
+		for (int k : oransje_ruter) {
+			brettet.get(k).setType('o');
+		}
+		brettet.get(28).setType('s');
+		brettet.get(65).setType('s');
+		brettet.get(56).setType('s');
+		
+		playGame();
+	}
 	
 	//movePlayer
 	public void movePlayer(Player spiller) {
@@ -30,6 +60,16 @@ public class Brett {
 		Rute newRute = brettet.get(newRuteIndex);
 		
 		
+		//Sjekker og fikser hvis ruten er opptatt
+				if (!(newRute.isOpptatt())) {
+					newRute.setPlayer(spiller);
+					oldRute.setPlayer(null);
+					spiller.setIRute(newRute);
+				}else {
+					fixOpptatt(spiller, newRute);
+					oldRute.setPlayer(null);
+				}
+		
 		//Sjekker og fikser hvis spilleren ender paa en spesiell rute
 		if(newRute.getType() == 'g'){
 			newRute = gronnRute(newRute, spiller);
@@ -42,28 +82,40 @@ public class Brett {
 			newRute = blaRute(diceThrow, spiller, newRute);
 			
 		}else if(newRute.getType() == 's'){
-			svartRute(input fra bruker: hvilken spiller skal stå over?);
+			//svartRute(input fra bruker: hvilken spiller skal stï¿½ over?);
+			Player maaStaaOver = null;
+			while (true){
+				Scanner reader = new Scanner(System.in);  // Reading from System.in
+				System.out.println("Which Player must wait? ");
+				String n = reader.nextLine();
+				reader.close();
+				if(!(Arrays.asList(playerNames).contains(n))){
+					System.out.println("That is not the name of a player!");
+				}
+				else{
+					for (Player p : spillere) {
+						if(p.getName().equals(n)){
+							maaStaaOver = p;
+							
+						}
+					}
+					break;
+				}
+			}
 			
-		}else if(newRute.getType() == 'o'){
+			svartRute(maaStaaOver);
+		}
+		else if(newRute.getType() == 'o'){
 			oransjeRute(spiller);
 		}
-			
-		//Sjekker og fikser hvis ruten er opptatt
-		if (!(newRute.isOpptatt())) {
-			newRute.setPlayer(spiller);
-			oldRute.setPlayer(null);
-			spiller.setIRute(newRute);
-		}else {
-			fixOpptatt(spiller, newRute);
-			oldRute.setPlayer(null);
-		}
 		
-		//Gjoer at spilleren kan kaste på nytt hvis den faar 6
+		
+		//Gjoer at spilleren kan kaste pï¿½ nytt hvis den faar 6
 		if(diceShows == 6){
 			movePlayer(spiller);
 		}
 	}
-		//Sykt bra skreve. Æ gjor litt forandring, men det var kult med rekursivt kall :)
+		//Sykt bra skreve. ï¿½ gjor litt forandring, men det var kult med rekursivt kall :)
 	private void fixOpptatt(Player sinTur, Rute oldRute){
 		Rute newRute = brettet.get(oldRute.getNummer() - 2);
 		Player staarHerFraFor = oldRute.getPlayer();
@@ -76,7 +128,7 @@ public class Brett {
 		sinTur.setIRute(oldRute);
 		staarHerFraFor.setIRute(newRute);
 		}
-	}
+	
 	
 	
 	public void executeRute(Rute rute){
@@ -90,7 +142,7 @@ public class Brett {
 			for (Player spiller: this.spillere){
 				sinTur = spiller;
 				if (sinTur.getPause()){
-					System.out.println(spiller.getName() + " må stå over denne runden. ");
+					System.out.println(spiller.getName() + " mï¿½ stï¿½ over denne runden. ");
 					sinTur.setPause(false);
 					continue;
 				}
@@ -98,50 +150,52 @@ public class Brett {
 				movePlayer(spiller);
 			}
 		}
+		System.out.println("Spillet er over!");
 			
 		
 	}
 	
 	//Rykk ned
 	public Rute rodRute(Rute foerStige){
-		Rute etterStige;
-		if (foerStige.getNummer == 21){
-			etterStige = brett.get(1);
-		}else if(foerStige.getNummer == 47){
-			etterStige = brett.get(25);
-		}else if(foerStige.getNummer == 72){
-			etterStige = brett.get(48);
-		}else if(foerStige.getNummer == 83){
-			etterStige = brett.get(25);
-		}else if(foerStige.getNummer == 98){
-			etterStige = brett.get(80);
-		}else if (foerStige.getNummer == 57)
-			etterStige = brett.get(16);
+		Rute etterStige = null;
+		if (foerStige.getNummer() == 21){
+			etterStige = brettet.get(1);
+		}else if(foerStige.getNummer() == 47){
+			etterStige = brettet.get(25);
+		}else if(foerStige.getNummer() == 72){
+			etterStige = brettet.get(48);
+		}else if(foerStige.getNummer() == 83){
+			etterStige = brettet.get(25);
+		}else if(foerStige.getNummer() == 98){
+			etterStige = brettet.get(80);
+		}else if (foerStige.getNummer() == 57){
+			etterStige = brettet.get(16);
 		}	
 		return etterStige;
 	}
 	
 	//Rykk opp
 	public Rute gronnRute(Rute foerStige, Player spiller){
-		Rute etterStige;
-		if (foerStige.getNummer == 6){
-			etterStige = brett.get(15);
-		}else if(foerStige.getNummer == 12){
-			etterStige = brett.get(30);
-		}else if(foerStige.getNummer == 23){
-			etterStige = brett.get(75);
-		}else if(foerStige.getNummer == 53){
-			etterStige = brett.get(73);
+		Rute etterStige = null;
+		if (foerStige.getNummer() == 6){
+			etterStige = brettet.get(15);
+		}else if(foerStige.getNummer() == 12){
+			etterStige = brettet.get(30);
+		}else if(foerStige.getNummer() == 23){
+			etterStige = brettet.get(75);
+		}else if(foerStige.getNummer() == 53){
+			etterStige = brettet.get(73);
 			oransjeRute(spiller);
-		}else if(foerStige.getNummer == 61){
-			etterStige = brett.get(79);
-		}else if(foerStige.getNummer == 88){
-			etterStige = brett.get(92);
-		}else if (foerStige.getNummer == 57)
-			etterStige = brett.get(81);
-		}	
+		}else if(foerStige.getNummer() == 61){
+			etterStige = brettet.get(79);
+		}else if(foerStige.getNummer() == 88){
+			etterStige = brettet.get(92);
+		}else if (foerStige.getNummer() == 57){
+			etterStige = brettet.get(81);	
+		}
 		return etterStige;
 	}
+	
 	
 	
 	//StÃ¥ over en runde
@@ -157,10 +211,15 @@ public class Brett {
 	//Enten opp eller ned
 	public Rute blaRute(int terningkast, Player spiller, Rute foerStige){
 		Rute etterStige;
-		if (terningkast =< 3){
+		if (terningkast <= 3){
 			etterStige = rodRute(foerStige);
 		}else{
 			etterStige = gronnRute(foerStige, spiller);
+		}
 		return etterStige;
 	}
-}	
+	
+	public static void main(String[] args) {
+		
+	}
+}
