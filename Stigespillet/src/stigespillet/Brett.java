@@ -16,8 +16,7 @@ public class Brett {
 	private List<String> playerNames = new ArrayList<String>();
 	
 	
-	Dice dice = new Dice();
-	
+	private Dice dice = new Dice();
 	
 	public Brett(List<Player> spillere){
 		for (Player player : spillere) {
