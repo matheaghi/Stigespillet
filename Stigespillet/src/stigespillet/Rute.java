@@ -34,6 +34,7 @@ public class Rute {
 		}
 	}
 	
+	
 	public void setPlayer(Player player){
 		this.player = player;
 		if (player == null){
