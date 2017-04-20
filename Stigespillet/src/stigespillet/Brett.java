@@ -82,7 +82,6 @@ public class Brett {
 			movePlayer(spiller);
 		}
 	}
-	
 
 	private void fixOpptatt(Player sinTur, Rute oldRute){
 		if(oldRute.getNummer == 1){
