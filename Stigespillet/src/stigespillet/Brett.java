@@ -96,7 +96,7 @@ public class Brett {
 			fixOpptatt(staarHerFraFor, newRute);
 		}
 		
-		//Hvis staarHerFraFor ender på en spesiel rute etter den er blitt flyttet bakover
+		//Hvis staarHerFraFor ender pï¿½ en spesiel rute etter den er blitt flyttet bakover
 		newRute = executeRute(newRute, staarHerFraFor);
 		newRute.setPlayer(staarHerFraFor);		
 		oldRute.setPlayer(sinTur);
@@ -151,6 +151,9 @@ public class Brett {
 		//initialize();
 		while (!isGameOver){
 			for (Player spiller: this.spillere){
+				if(isGameOver){
+					break;
+				}
 				sinTur = spiller;
 				if (sinTur.getPause()){
 					System.out.println(spiller.getName() + " maa staa over denne runden. ");
@@ -161,7 +164,7 @@ public class Brett {
 				movePlayer(spiller);
 			}
 		}
-		System.out.println("Spillet er over! Spiller" + + "vant :)");
+		System.out.println("Spillet er over! Spiller" + sinTur + "vant :)");
 			
 		
 	}
@@ -246,6 +249,12 @@ public class Brett {
 		}
 		return etterStige;
 	}
+	
+	public String getMelding(){
+		return "Hello";
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		
