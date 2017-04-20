@@ -9,18 +9,14 @@ public class Rute {
 	private char type;
 	private boolean opptatt;
 	private Player player;
-	private Player player_2;
+	
+	//Players er spillere i rute nummmer 1
+	private List<Player> players = new ArrayList<Player>();
 	private List<Character> pssble_types = new ArrayList<Character>(Arrays.asList(new Character[]{'r', 'g', 'o', 's', 'b'}));
 	
 	
 	public Rute(int index){
 		this.nummer = index+1;
-	}
-	
-	public void setNummer(int nummer) {
-		if (nummer > 0) {
-			this.nummer = nummer;
-		}
 	}
 	
 	public void setType(char type) {
@@ -46,10 +42,19 @@ public class Rute {
 			this.opptatt = true;
 		}
 	}
-	
-	/*public Rute getRute(){
-		return this;
-	}*/
+	public void setPlayers(Player player, boolean leggTil){
+		if (leggTil && !(this.players.contains(player)){
+			this.players.add(player);
+		}else if(!leggTil && players.contains(player))
+			this.players.remove(player);
+		}
+		this.opptatt = false;
+		for (Player p : players){
+			if (player != null){
+				this.opptatt = true;
+		}
+		
+	}
 	
 	public int getNummer(){
 		return this.nummer;
@@ -57,6 +62,10 @@ public class Rute {
 	
 	public Player getPlayer(){
 		return this.player;
+	}
+	
+	public ArrayList<Player> getPlayers(){
+		return this.players;
 	}
 	
 	public char getType(){
