@@ -106,7 +106,6 @@ public class Brett {
 	}
 	
 	
-	
 	public Rute executeRute(Rute rute, Player spiller){
 		if(rute.getType() == 'g'){
 			rute = gronnRute(rute, spiller);

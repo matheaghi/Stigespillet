@@ -57,7 +57,6 @@ public class Rute {
 		}
 		
 	}
-	
 	public int getNummer(){
 		return this.nummer;
 	}
