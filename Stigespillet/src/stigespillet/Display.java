@@ -1,9 +1,12 @@
 package stigespillet;
 
+import java.awt.BorderLayout;
+
 import java.awt.Canvas;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Display {
 
@@ -12,15 +15,19 @@ public class Display {
 	
 	private String title;
 	private int width, height;
+	private JTextField keyText = new JTextField(20);
+	
 	
 	public Display(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
 		this.height = height;
 		
+		
+		
+		
 		createDisplay();
 	}
-	
 	
 	private void createDisplay(){
 		frame = new JFrame(title);
@@ -28,7 +35,8 @@ public class Display {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		frame.setVisible(false);
+		frame.add(keyText);
 		
 		
 		canvas = new Canvas();
@@ -44,6 +52,10 @@ public class Display {
 	
 	public Canvas getCanvas(){
 		return canvas;
+	}
+	
+	public void setVisibility(boolean bla){
+		frame.setVisible(bla);
 	}
 	
 	public JFrame getFrame(){ 

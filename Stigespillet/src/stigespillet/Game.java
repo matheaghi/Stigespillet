@@ -6,11 +6,16 @@ import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JFrame;
+import javax.swing.*;
+
 public class Game implements Runnable{
 	
 	private Display display;
+	private DisplayPlayerChoice pickPlayer;
 	public int width, height;
 	public String title;
+	private boolean displayGame = false;
 	
 	private boolean running = false;
 	private Thread thread;
@@ -22,7 +27,10 @@ public class Game implements Runnable{
 	private SpriteSheet sheet;
 	private SpriteSheet emoticons;
 	
-	Brett spillebrett = new Brett();
+	JTextField keyText = new JTextField(20);
+	
+	
+	//Brett spillebrett = new Brett();
 	
 	
 	int x = 20;
@@ -48,10 +56,13 @@ public class Game implements Runnable{
 	private void init(){
 		display = new Display(title, width, height);
 		display.getFrame().addKeyListener(keyManager);
+		pickPlayer = new DisplayPlayerChoice("Pick Player", width, height);
+		pickPlayer.setVisibility(true);
 		testImage = ImageLoader.loadImage("/textures/kitten.png");
 		sheet = new SpriteSheet(ImageLoader.loadImage("/textures/Board.png"));
 		emoticons = new SpriteSheet(ImageLoader.loadImage("/textures/emoticons2.png"));
 		Assets.init();
+		
 		
 		gameState = new GameState(this);
 		State.setState(gameState);
@@ -72,17 +83,25 @@ public class Game implements Runnable{
 	}
 	
 	private void render(){
+		if(displayGame == false){
+		
+			
+		}
+		else{
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null){
 			display.getCanvas().createBufferStrategy(3);
 			return;
 		}
+		}
+		
 		g = bs.getDrawGraphics();
 		
+		if(displayGame == true){
 		//Clear Screen
 		g.clearRect(0, 0, width, height);
 		//Draw Here!
-		g.drawString(Brett.class.getMelding(), 1000,50 );
+		//g.drawString(Brett.class.getMelding(), 1000,50 );
 		
 		g.drawImage(sheet.crop(0, 0, 600, 600), 20, 5, null);
 		//Fargelegg ruter:
@@ -97,6 +116,11 @@ public class Game implements Runnable{
 		
 		if(State.getState() != null){
 			State.getState().render(g);
+		}
+		}
+		
+		else{
+			
 		}
 		
 		//End Drawing!
