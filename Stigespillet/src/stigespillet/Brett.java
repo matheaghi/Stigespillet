@@ -65,11 +65,15 @@ public class Brett {
 		promptEnterKey(2);
 		
 		//Sjekker og fikser hvis ruten er opptatt
-		if (!(newRute.isOpptatt())) {
+		if (!newRute.isOpptatt() && oldRute.getNummer == 1) {
+			newRute.setPlayer(spiller);
+			oldRute.setPlayers(spiller, false);
+			spiller.setIRute(newRute);
+		}else if (!newRute.isOpptatt()) {
 			newRute.setPlayer(spiller);
 			oldRute.setPlayer(null);
 			spiller.setIRute(newRute);
-		}else {
+		}else{
 			fixOpptatt(spiller, newRute);
 			oldRute.setPlayer(null);
 		}
@@ -84,24 +88,25 @@ public class Brett {
 	}
 
 	private void fixOpptatt(Player sinTur, Rute oldRute){
-		if(oldRute.getNummer == 1){
-			if (oldRute.getPlayer_2 == null){
-				oldRute.setPlayer_2(sinTur);
-			}
-		}
 		Rute newRute = brettet.get(oldRute.getNummer() - 2);
 		Player staarHerFraFor = oldRute.getPlayer();
-		oldRute.setPlayer(sinTur);
-		if (newRute.isOpptatt()) {
+		if (newRute.isOpptatt() && newRute.getNummer != 1) {
 			fixOpptatt(staarHerFraFor, newRute);
 		}
 		
+		
 		//Hvis staarHerFraFor ender på en spesiel rute etter den er blitt flyttet bakover
-		newRute = executeRute(newRute, staarHerFraFor);
-		newRute.setPlayer(staarHerFraFor);		
+		if (newRute.getNummer == 1){
+			newRute.setPlayers(staarHerFraFor, true);			
+		}else{
+			newRute = executeRute(newRute, staarHerFraFor);
+			newRute.setPlayer(staarHerFraFor);
+		}
+		
 		oldRute.setPlayer(sinTur);
 		sinTur.setIRute(oldRute);
 		staarHerFraFor.setIRute(newRute);
+		
 		
 	}
 	
@@ -238,6 +243,7 @@ public class Brett {
 	
 	//Enten opp eller ned
 	public Rute blaRute(int terningkast, Player spiller, Rute foerStige){
+		promptEnterKey(1);
 		Rute etterStige;
 		if (terningkast <= 3){
 			etterStige = rodRute(foerStige);
