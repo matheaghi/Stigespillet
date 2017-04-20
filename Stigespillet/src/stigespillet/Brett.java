@@ -254,6 +254,16 @@ public class Brett {
 	}
 	
 	public static void main(String[] args) {
+		Player Randi = new Player("Randi", 1, 20, 545);
+		Player Mathea = new Player("Mathea", 2, 20, 545);
+		Player Kurt = new Player("Kurt", 3, 20, 545);
+		Player Lise = new Player ("Lise", 4, 20, 545);
+		
+		List<Player> players = new ArrayList<>();
+		players.add(Randi);players.add(Mathea);players.add(Kurt);players.add(Lise);
+		
+		Brett brett = new Brett(players);
 		
 	}
+	
 }
