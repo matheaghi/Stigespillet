@@ -25,23 +25,48 @@ public class Game implements Runnable{
 	
 	int x = 20;
 	
+	//States
+	private State gameState;
+	//private State menuState;
+	//private State newGameState;
+	
+	
+	
 	public Game(String title, int width, int height){
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		keyManager = new KeyManager();
 	 }
+	
+	//Input
+	private KeyManager keyManager;
 	
 	
 	private void init(){
 		display = new Display(title, width, height);
+		display.getFrame().addKeyListener(keyManager);
 		testImage = ImageLoader.loadImage("/textures/kitten.png");
 		sheet = new SpriteSheet(ImageLoader.loadImage("/textures/Grid6003.png"));
 		emoticons = new SpriteSheet(ImageLoader.loadImage("/textures/emoticons2.png"));
 		tileColors = new SpriteSheet(ImageLoader.loadImage("/textures/tileColors4.png"));
+		Assets.init();
 		
+		gameState = new GameState(this);
+		State.setState(gameState);
+		/*menuState = new MenuState(this);
+		State.setState(menuState);
+		newGameState = new NewGameState(this);
+		State.setState(newGameState);*/
 	}
 	
 	private void tick(){
+		keyManager.tick();
+		
+		if(State.getState() != null){
+			State.getState().tick();
+		}
+		
 		x += 1;
 	}
 	
@@ -85,7 +110,12 @@ public class Game implements Runnable{
 		g.drawImage(emoticons.crop(60, 0, 60, 60), x, 5, null);
 		
 		
-		g.drawImage(emoticons.crop(0, 0, 60, 60), 20, 545, null);
+		g.drawImage(Assets.angry, 20, 545, null);
+		
+		
+		if(State.getState() != null){
+			State.getState().render(g);
+		}
 		
 		//End Drawing!
 		bs.show();
@@ -128,6 +158,10 @@ public class Game implements Runnable{
 		
 		stop();
 		
+	}
+	
+	public KeyManager getKeyManager(){
+		return keyManager;
 	}
 	
 	
