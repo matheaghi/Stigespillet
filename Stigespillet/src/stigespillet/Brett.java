@@ -102,6 +102,7 @@ public class Brett {
 		oldRute.setPlayer(sinTur);
 		sinTur.setIRute(oldRute);
 		staarHerFraFor.setIRute(newRute);
+		
 	}
 	
 	

@@ -42,6 +42,7 @@ public class Rute {
 			this.opptatt = true;
 		}
 	}
+	
 	public void setPlayers(Player player, boolean leggTil){
 		if (leggTil && !(this.players.contains(player)){
 			this.players.add(player);
