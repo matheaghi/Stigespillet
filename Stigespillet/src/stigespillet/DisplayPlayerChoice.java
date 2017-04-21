@@ -14,6 +14,7 @@ public class DisplayPlayerChoice {
 	
 	private String title;
 	private int width, height;
+	
 	private JTextField player1 = new JTextField("p1");
 	private JTextField player2 = new JTextField("p2");
 	private JTextField player3 = new JTextField("p3");
@@ -57,16 +58,16 @@ public class DisplayPlayerChoice {
 	
 	private void createDisplay(){
 		frame = new JFrame(title);
-		frame.setBounds(10,10,1200,625);
+		frame.setSize(width,height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(6,5));
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(false);
-		frame.add(player1);
-		frame.add(player2);
-		frame.add(player3);
-		frame.add(player4);
+		//frame.add(player1);
+		//frame.add(player2);
+		//frame.add(player3);
+		//frame.add(player4);
 	}
 	
 	public void setVisibility(boolean bla){

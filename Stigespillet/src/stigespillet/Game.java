@@ -12,10 +12,10 @@ import javax.swing.*;
 public class Game implements Runnable{
 	
 	private Display display;
-	private DisplayPlayerChoice pickPlayer;
+	//private DisplayPlayerChoice pickPlayer;
 	public int width, height;
 	public String title;
-	private boolean displayGame = false;
+	private boolean displayGame = true;
 	
 	private boolean running = false;
 	private Thread thread;
@@ -56,8 +56,8 @@ public class Game implements Runnable{
 	private void init(){
 		display = new Display(title, width, height);
 		display.getFrame().addKeyListener(keyManager);
-		pickPlayer = new DisplayPlayerChoice("Pick Player", width, height);
-		pickPlayer.setVisibility(true);
+		//pickPlayer = new DisplayPlayerChoice("Pick Player", width, height);
+		display.setVisibility(true);
 		testImage = ImageLoader.loadImage("/textures/kitten.png");
 		sheet = new SpriteSheet(ImageLoader.loadImage("/textures/Board.png"));
 		emoticons = new SpriteSheet(ImageLoader.loadImage("/textures/emoticons2.png"));

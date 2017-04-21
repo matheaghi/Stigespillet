@@ -25,7 +25,7 @@ Legger også til .1 s delay så tallene blir vist, dette må vi sjekke om er rik
 		for (int i = 0; i < 17; i++) {
 			System.out.println(dice.showNumber());
 		}
-		System.out.println(Dice.class.throw_dice());
+		System.out.println(dice.throwDice());
 		System.out.println("Tall:");
 		System.out.println(dice.nummer);
 

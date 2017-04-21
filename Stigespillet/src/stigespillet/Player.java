@@ -46,19 +46,19 @@ public class Player extends Entity{
 
 	@Override
 	public void tick() {
-		if(game.getKeyManager().up)
+	/*	if(game.getKeyManager().up)
 			y -= 3;
 		if(game.getKeyManager().down)
 			y += 3;
 		if(game.getKeyManager().left)
 			x -= 3;
 		if(game.getKeyManager().right)
-			x += 3;
+			x += 3;*/
 	}
 
 	@Override
 	public void render(Graphics g) { 
-		g.drawImage(icon, 100, 100, null);
+		g.drawImage(icon, (int)x, (int)y, null);
 	}
 	
 /*	private int[] getXY(int rutenr){
