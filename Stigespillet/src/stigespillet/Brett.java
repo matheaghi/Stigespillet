@@ -8,19 +8,19 @@ import java.util.Scanner;
 
 public class Brett {
 	
-	
 	private Player sinTur;
 	private ArrayList<Rute> brettet;
 	private List<Player> spillere = new ArrayList<Player>();
-	private boolean isGameOver = false;
 	private List<String> playerNames = new ArrayList<String>();
+	private boolean isGameOver = false;
 	
-	
+	private String melding;
 	private Dice dice = new Dice();
 	
 	public Brett(List<Player> spillere){
 		for (Player player : spillere) {
-			playerNames.add(player.getName());
+			spillere.add(player);
+			player.setIRute(brettet.get(0));
 		}
 		this.spillere = spillere;
 		for (int i = 0; i < 100; i++) {
@@ -45,10 +45,29 @@ public class Brett {
 		playGame();
 	}
 	
+	public void playGame(){
+		//initialize();
+		while (!isGameOver){
+			for (Player spiller: this.spillere){
+				sinTur = spiller;
+				if (sinTur.getPause()){
+					sinTur.setPause(false);
+					continue;
+				}
+				movePlayer(spiller);
+				if(isGameOver){
+					break;
+				}
+			}
+		}
+		setMelding("3");		
+	}
+	
 	//movePlayer
 	public void movePlayer(Player spiller) {
 		//gjor at spiller maa trykke enter for aa kaste terning
-		promptEnterKey(1);
+		setMelding("Det er " + spiller.getName() + "sin tur. Press ENTER for aa kaste terning.");
+		promptEnterKey();
 		int diceShows = this.dice.throwDice();
 		
 		//Hvis terningkastet forer til at spillerens plasering gar over 100 er spillet ferdig. 
@@ -62,16 +81,24 @@ public class Brett {
 		Rute newRute = brettet.get(newRuteIndex);
 		
 		//Spiller maa presse enter for aa flytte brikken
-		promptEnterKey(2);
+		String feedBack = diceFeedback(diceShows);
+		setMelding(feedBack);
+		setMelding("Klikk ENTER for � flytte brikken din");
+		promptEnterKey();
 		
 		//Sjekker og fikser hvis ruten er opptatt
-		if (!(newRute.isOpptatt())) {
+		if (!newRute.isOpptatt() && oldRute.getNummer() == 1) {
+			newRute.setPlayer(spiller);
+			oldRute.setPlayers(spiller, false);
+			spiller.setIRute(newRute);
+		}else if (!newRute.isOpptatt()) {
 			newRute.setPlayer(spiller);
 			oldRute.setPlayer(null);
 			spiller.setIRute(newRute);
-		}else {
+		}else{
 			fixOpptatt(spiller, newRute);
 			oldRute.setPlayer(null);
+			setMelding("Den ruten var visst opptatt, haha, motspilleren maa trekke bakover!");
 		}
 		
 		//Sjekker og fikser hvis spilleren ender paa en spesiell rute
@@ -84,41 +111,72 @@ public class Brett {
 	}
 
 	private void fixOpptatt(Player sinTur, Rute oldRute){
-		if(oldRute.getNummer == 1){
-			if (oldRute.getPlayer_2 == null){
-				oldRute.setPlayer_2(sinTur);
-			}
-		}
 		Rute newRute = brettet.get(oldRute.getNummer() - 2);
 		Player staarHerFraFor = oldRute.getPlayer();
-		oldRute.setPlayer(sinTur);
-		if (newRute.isOpptatt()) {
+		if (newRute.isOpptatt() && newRute.getNummer() != 1) {
 			fixOpptatt(staarHerFraFor, newRute);
 		}
 		
+
 		//Hvis staarHerFraFor ender p� en spesiel rute etter den er blitt flyttet bakover
 		newRute = executeRute(newRute, staarHerFraFor);
 		newRute.setPlayer(staarHerFraFor);		
+
+		
+		//Hvis staarHerFraFor ender p� en spesiel rute etter den er blitt flyttet bakover
+		if (newRute.getNummer() == 1){
+			newRute.setPlayers(staarHerFraFor, true);			
+		}else{
+			newRute = executeRute(newRute, staarHerFraFor);
+			newRute.setPlayer(staarHerFraFor);
+		}
+		
+
 		oldRute.setPlayer(sinTur);
 		sinTur.setIRute(oldRute);
 		staarHerFraFor.setIRute(newRute);
 		
+		
 	}
 	
+	public String diceFeedback(int dicethrow){
+		if(dicethrow == 1){
+			return "Du fikk desverre bare en 1'er... Men det kan jo vaere bra det og";
+		}else if(dicethrow == 2){
+			return "Du fikk en 2'er p� terningen, hva kan vi gjoere med det?";
+		}else if(dicethrow == 3){
+			return "Du fikk en midt p� treet 3'er. Det kunne vaert vaerre";
+		}else if(dicethrow == 4){
+			return "Ikke verst, du fikk en 4'er.";
+		}else if(dicethrow == 5){
+			return "Yeah, en 5'er kommer man langt med. Hei som det gaar";
+		}else{
+			return "Hurra, 6'er! Ikke lenge igjen til maal :D";
+		}
+		
+	}
 	
 	public Rute executeRute(Rute rute, Player spiller){
 		if(rute.getType() == 'g'){
 			rute = gronnRute(rute, spiller);
+			setMelding("Hurra, en stige! Tjohei :)");
 			
 		}else if(rute.getType() == 'r'){
 			rute = rodRute(rute);
+			setMelding("Buhuu, en slange. Du m� tilbake igjen");
 			
 		}else if(rute.getType() == 'b'){
+			setMelding("Du kom paa en blaa rute og maa kaste terning. Faar du 1-3 rykker du ned, faar du 4-6 farer du oppover (Press ENTER)");
+			promptEnterKey();
 			int diceThrow = this.dice.throwDice();
+			if(diceThrow > 3){
+				setMelding("Bra jobba, du kan ta stigen!");
+			}else{
+				setMelding("Saa trist, slagen tok deg...");
+			}
 			rute = blaRute(diceThrow, spiller, rute);
 			
 		}else if(rute.getType() == 's'){
-			//Flyttet lesninen av input inn i svartRute()
 			svartRute();
 		}
 		else if(rute.getType() == 'o'){
@@ -132,22 +190,18 @@ public class Brett {
 	//tar inn et tall som indikerer hvorfor man maa trykke enter
 	//1 = spiller skal kaste terning
 	//2 = spiller skal flytte brikken sin
-	public void promptEnterKey(int nummer){
+	public void promptEnterKey(){
 		Scanner scanner;
-		if (nummer == 1){
-			System.out.println("Press \"ENTER\" to throw the dice...");
-			scanner = new Scanner(System.in);
-			scanner.nextLine();
-		}else if(nummer == 2){
-			System.out.println("Press \"ENTER\" to move your faboulus face/piece/chip...");
-			scanner = new Scanner(System.in);
-			scanner.nextLine();
+		scanner = new Scanner(System.in);
+		scanner.nextLine();
+		scanner.close();
 		}
 		
-	}
+	
 		
 		
-	public void playGame(){
+
+	/*public void playGame(){
 		//initialize();
 		while (!isGameOver){
 			for (Player spiller: this.spillere){
@@ -167,7 +221,7 @@ public class Brett {
 		System.out.println("Spillet er over! Spiller" + sinTur + "vant :)");
 			
 		
-	}
+}*/
 	
 	//Rykk ned
 	public Rute rodRute(Rute foerStige){
@@ -219,28 +273,27 @@ public class Brett {
 	
 	//Velg noen som må stå over
 	public void svartRute(){
-		Player maaStaaOver = null;
 		while (true){
+			setMelding(sinTur.getName() + "Skriv inn (trykk keys) hvilken spiller du onsker skal staa over en runde");
 			Scanner reader = new Scanner(System.in);  // Reading from System.in
-			System.out.println("Which Player must wait? ");
 			String n = reader.nextLine();
 			reader.close();
 			if(!(Arrays.asList(playerNames).contains(n))){
-				System.out.println("That is not the name of a player!");
+				setMelding("Det er ikke en av spillerene. Skriv igjen");
 			}else{
 				for (Player p : spillere) {
 					if(p.getName().equals(n)){
-						maaStaaOver = p;
+						p.setPause(true);
 					}
 				}
 				break;
 			}
 		}
-		maaStaaOver.setPause(true);
 	}
 	
 	//Enten opp eller ned
 	public Rute blaRute(int terningkast, Player spiller, Rute foerStige){
+		promptEnterKey();
 		Rute etterStige;
 		if (terningkast <= 3){
 			etterStige = rodRute(foerStige);
@@ -249,14 +302,20 @@ public class Brett {
 		}
 		return etterStige;
 	}
-	
-	public String getMelding(){
-		return "Hello";
-	}
-	
-	
-	
-	public static void main(String[] args) {
 		
+	public void setMelding(String mld){
+		this.melding = mld + "/n" + this.melding;
+		/*if(mld == 1){
+			this.melding = this.sinTur.getName() + " det er din tur. Trykk enter for � kaste terningen";
+		}else if(mld == 2){
+			this.melding = "Trykk ENTER " + sinTur.getName() + " for � flytte brikken";
+		}else if(mld == 3){
+			this.melding = "Spillet er ferdig og " + sinTur.getName() + "vant!! ^_^";
+		}*/
 	}
+		
+	public String getMelding(){
+		return this.melding;
+	}
+	
 }

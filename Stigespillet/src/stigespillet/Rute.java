@@ -45,15 +45,15 @@ public class Rute {
 	}
 	
 	public void setPlayers(Player player, boolean leggTil){
-		if (leggTil && !(this.players.contains(player)){
+		if (leggTil && !(this.players.contains(player))){
 			this.players.add(player);
 		}else if(!leggTil && players.contains(player))
 			this.players.remove(player);
-		}
 		this.opptatt = false;
 		for (Player p : players){
 			if (player != null){
 				this.opptatt = true;
+			}
 		}
 		
 	}
@@ -65,7 +65,7 @@ public class Rute {
 		return this.player;
 	}
 	
-	public ArrayList<Player> getPlayers(){
+	public List<Player> getPlayers(){
 		return this.players;
 	}
 	

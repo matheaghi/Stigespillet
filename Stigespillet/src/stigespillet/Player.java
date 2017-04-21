@@ -1,7 +1,7 @@
 package stigespillet;
 
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
 
@@ -9,12 +9,12 @@ public class Player extends Entity{
 	private int playerNr;
 	private Rute iRute /* index, ikke nummeret på brettet*/;
 	private boolean pause = false;
-	private Image icon = Assets.grin;
-	
 	private Game game;
+	private BufferedImage icon = Assets.grin;
+	
 	
 	public Player(String name, int playerNr, float x, float y, Game game){
-		super(x, y);
+		super(x,y);
 		this.name = name;
 		this.playerNr = playerNr;
 		this.game = game;
@@ -43,7 +43,6 @@ public class Player extends Entity{
 	public void setPause(boolean some){
 		pause = some;
 	}
-
 	@Override
 	public void tick() {
 	/*	if(game.getKeyManager().up)
@@ -60,6 +59,7 @@ public class Player extends Entity{
 	public void render(Graphics g) { 
 		g.drawImage(icon, (int)x, (int)y, null);
 	}
+
 	
 /*	private int[] getXY(int rutenr){
 		
