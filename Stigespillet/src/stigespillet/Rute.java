@@ -1,5 +1,4 @@
 package stigespillet;
-import java.security.spec.PSSParameterSpec;
 import java.util.*;
 
 public class Rute {
@@ -51,7 +50,7 @@ public class Rute {
 			this.players.remove(player);
 		this.opptatt = false;
 		for (Player p : players){
-			if (player != null){
+			if (p != null){
 				this.opptatt = true;
 			}
 		}

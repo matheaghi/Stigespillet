@@ -1,21 +1,14 @@
 package stigespillet;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JFrame;
-import javax.swing.*;
 
 public class Game implements Runnable{
 	
 	private Display display;
-	//private DisplayPlayerChoice pickPlayer;
 	public int width, height;
 	public String title;
-	private boolean displayGame = true;
 	
 	private boolean running = false;
 	private Thread thread;
@@ -23,22 +16,14 @@ public class Game implements Runnable{
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private Image testImage;
+	private Brett spill;
+	
 	private SpriteSheet sheet;
-	private SpriteSheet emoticons;
-	
-	JTextField keyText = new JTextField(20);
-	
-	
-	//Brett spillebrett = new Brett();
-	
 	
 	int x = 20;
 	
 	//States
 	private State gameState;
-	//private State menuState;
-	//private State newGameState;
 	
 	
 	
@@ -46,6 +31,7 @@ public class Game implements Runnable{
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		
 		keyManager = new KeyManager();
 	 }
 	
@@ -56,20 +42,16 @@ public class Game implements Runnable{
 	private void init(){
 		display = new Display(title, width, height);
 		display.getFrame().addKeyListener(keyManager);
-		//pickPlayer = new DisplayPlayerChoice("Pick Player", width, height);
 		display.setVisibility(true);
-		testImage = ImageLoader.loadImage("/textures/kitten.png");
 		sheet = new SpriteSheet(ImageLoader.loadImage("/textures/Board.png"));
-		emoticons = new SpriteSheet(ImageLoader.loadImage("/textures/emoticons2.png"));
 		Assets.init();
+		spill = new Brett(4, this);
+		System.out.println(spill.getMelding());
 		
 		
-		gameState = new GameState(this);
+		gameState = new GameState(this, spill);
 		State.setState(gameState);
-		/*menuState = new MenuState(this);
-		State.setState(menuState);
-		newGameState = new NewGameState(this);
-		State.setState(newGameState);*/
+
 	}
 	
 	private void tick(){
@@ -79,48 +61,68 @@ public class Game implements Runnable{
 			State.getState().tick();
 		}
 		
-		x += 1;
+		spill.playGame();
+		
+
 	}
 	
 	private void render(){
-		if(displayGame == false){
-		
-			
-		}
-		else{
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null){
 			display.getCanvas().createBufferStrategy(3);
 			return;
 		}
-		}
 		
 		g = bs.getDrawGraphics();
-		
-		if(displayGame == true){
+
 		//Clear Screen
 		g.clearRect(0, 0, width, height);
 		//Draw Here!
-		//g.drawString(Brett.class.getMelding(), 1000,50 );
+		if(spill.getIsGameOver()){
+			g.drawString("Spillet er over, og " + spill.getsinTur().getName() + " vant! Grattis!", 650,200 );
+		}
+		else{
+			if (spill.getMelding().size() > 10){
+				for (int i = 0; i < 10; i++) {
+				if(!(spill.getMelding().get(i) == null)){
+				g.drawString(spill.getMelding().get(i), 650,200 + (i*20));
+				}
+			else{
+				for (int j = 0; j < spill.getMelding().size(); j++) {
+					g.drawString(spill.getMelding().get(j), 650,200 + (j*20));
+				}
+				}
+			}
+			
+			}
+		}
+		
 		
 		g.drawImage(sheet.crop(0, 0, 600, 600), 20, 5, null);
+		
+		
+		for (int i = 0; i < spill.getSpillere().size(); i++) {
+			g.drawString(spill.getSpillere().get(i).getName(), 700, 50 + (i*40));
+			g.drawImage(spill.getSpillere().get(i).getIcon(), 650, 50 + (i*40) - 40, null);
+		}
+
+		
+		
+
+		
+		
 		//Fargelegg ruter:
 		
 		
 		
-		g.drawImage(emoticons.crop(60, 0, 60, 60), x, 5, null);
+		//g.drawImage(emoticons.crop(60, 0, 60, 60), x, 5, null);
 		
 		
-		g.drawImage(Assets.angry, 20, 545, null);
+		//g.drawImage(Assets.angry, 20, 545, null);
 		
 		
 		if(State.getState() != null){
 			State.getState().render(g);
-		}
-		}
-		
-		else{
-			
 		}
 		
 		//End Drawing!
@@ -169,6 +171,34 @@ public class Game implements Runnable{
 	public KeyManager getKeyManager(){
 		return keyManager;
 	}
+	
+	
+	
+	public void keyPressed(KeyEvent e){
+		int key = e.getKeyCode();
+		
+		if(key == KeyEvent.VK_1){
+			System.out.println("Skrev 1");
+		}
+		else if(key == KeyEvent.VK_2){
+			
+		}
+		else if(key == KeyEvent.VK_3){
+			
+		}
+		
+		else if(key == KeyEvent.VK_4){
+			
+		}
+	}
+	
+	public void keyReleased(KeyEvent e){
+		
+	}
+	
+	
+	
+	
 	
 	
 	public synchronized void start(){
