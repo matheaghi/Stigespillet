@@ -13,7 +13,7 @@ public class Display {
 	
 	private String title;
 	private int width, height;
-	private JTextField keyText = new JTextField(20);
+//	private JTextField keyText = new JTextField(20);
 	
 	
 	public Display(String title, int width, int height) {
@@ -34,7 +34,7 @@ public class Display {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(false);
-		frame.add(keyText);
+//		frame.add(keyText);
 		
 		
 		canvas = new Canvas();

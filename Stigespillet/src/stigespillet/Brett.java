@@ -14,8 +14,6 @@ public class Brett {
 	private boolean isGameOver = false;
 	private List<String> meld = new ArrayList<>();
 	private List<BufferedImage> emojis = new ArrayList<BufferedImage>();
-	
-
 	private Dice dice = new Dice();
 	
 	
@@ -38,7 +36,7 @@ public class Brett {
 		makelist();
 	
 		for (int i = 0; i < tall; i++) {
-			spillere.add(new Player("Player "+ (i+1), i+1, 20,545, game));
+			spillere.add(new Player("Player "+ (i+1), i+1, 20,545, game, this));
 		}
 		
 		for (int i = 0; i < 100; i++) {
@@ -50,11 +48,9 @@ public class Brett {
 			BufferedImage emoji = emojis.get(nummer);
 			emojis.remove(emoji);
 			spillere.get(i).setIcon(emoji);
-			
 		}
 		
 		for (Player player : spillere) {
-			
 			int teller = 0;
 			for (Player player2 : spillere) {
 				if(teller == 1){
@@ -90,31 +86,11 @@ public class Brett {
 		brettet.get(56).setType('b');
 		
 		sinTur = spillere.get(0);
-		
-		//playGame();
 	}
 	
 	public List<Player> getSpillere(){
 		return this.spillere;
 	}
-	
-/*	public void playGame(){
-		//initialize();
-		while (!isGameOver){
-			for (Player spiller: this.spillere){
-				sinTur = spiller;
-				if (sinTur.getPause()){
-					sinTur.setPause(false);
-					continue;
-				}
-				movePlayer(spiller);
-				if(isGameOver){
-					break;
-				}
-			}
-		}
-		setMelding("Spillet er ferdig og " + sinTur.getName() + " vant");		
-	}*/
 	
 	public void playGame(){
 		if(isGameOver) {
@@ -141,6 +117,9 @@ public class Brett {
 		
 		int diceShows = this.dice.throwDice();
 		
+		spiller.setTerningkast(diceShows);
+		spiller.setForrigeRute(spiller.getIRute());
+		spiller.setTokStige(false);
 		//Hvis terningkastet forer til at spillerens plasering gar over 100 er spillet ferdig. 
 		if ((spiller.getIRute().getNummer() + diceShows) >= 100){
 			this.isGameOver = true;
@@ -156,7 +135,6 @@ public class Brett {
 		String feedBack = diceFeedback(diceShows);
 		setMelding(feedBack);
 		setMelding("Klikk ENTER for aa flytte brikken din");
-		//promptEnterKey();
 		
 		//Sjekker og fikser hvis ruten er opptatt
 		if (!newRute.isOpptatt() && oldRute.getNummer() == 1) {
@@ -196,11 +174,8 @@ public class Brett {
 			fixOpptatt(staarHerFraFor, newRute);
 		}
 		
-
-		//Hvis staarHerFraFor ender p� en spesiel rute etter den er blitt flyttet bakover
 		newRute = executeRute(newRute, staarHerFraFor);
 		newRute.setPlayer(staarHerFraFor);		
-
 		
 		//Hvis staarHerFraFor ender p� en spesiel rute etter den er blitt flyttet bakover
 		if (newRute.getNummer() == 1){
@@ -209,13 +184,9 @@ public class Brett {
 			newRute = executeRute(newRute, staarHerFraFor);
 			newRute.setPlayer(staarHerFraFor);
 		}
-		
-
 		oldRute.setPlayer(sinTur);
 		sinTur.setIRute(oldRute);
 		staarHerFraFor.setIRute(newRute);
-		
-		
 	}
 	
 	public Player getsinTur(){
@@ -234,9 +205,8 @@ public class Brett {
 		}else if(dicethrow == 5){
 			return "Yeah, en 5'er kommer man langt med. Hei som det gaar";
 		}else{
-			return "Hurra, 6'er! Ikke lenge igjen til maal :D";
+			return "Hurra, 6'er! Da kan du kaste igjen ^_^";
 		}
-		
 	}
 	
 	public Rute executeRute(Rute rute, Player spiller){
@@ -245,8 +215,8 @@ public class Brett {
 			setMelding("Hurra, en stige! Tjohei :)");
 			
 		}else if(rute.getType() == 'r'){
-			rute = rodRute(rute);
-			setMelding("Buhuu, en slange. Du m� tilbake igjen");
+			rute = rodRute(rute, spiller);
+			setMelding("Buhuu, en slange. Du maa tilbake igjen");
 			
 		}else if(rute.getType() == 'b'){
 			setMelding("Du kom paa en blaa rute og maa kaste terning. Faar du 1-3 rykker du ned, faar du 4-6 farer du oppover (Press ENTER)");
@@ -267,46 +237,13 @@ public class Brett {
 		}	
 		
 		return rute;
-	}
-	
-
-	public void promptEnterKey(){
-		Scanner scanner;
-		scanner = new Scanner(System.in);
-		scanner.nextLine();
-		scanner.close();
-		}
-		
-	
-		
-		
-
-	/*public void playGame(){
-		//initialize();
-		while (!isGameOver){
-			for (Player spiller: this.spillere){
-				if(isGameOver){
-					break;
-				}
-				sinTur = spiller;
-				if (sinTur.getPause()){
-					System.out.println(spiller.getName() + " maa staa over denne runden. ");
-					sinTur.setPause(false);
-					continue;
-				}
-				System.out.println("Det er " + spiller + " sin tur.");
-				movePlayer(spiller);
-			}
-		}
-		System.out.println("Spillet er over! Spiller" + sinTur + "vant :)");
-			
-		
-}*/
+	}	
 	
 	//Rykk ned
-	public Rute rodRute(Rute foerStige){
+	public Rute rodRute(Rute foerStige, Player spiller){
 		System.out.println("rød");
 		Rute etterStige = null;
+		spiller.setTokStige(true);
 		if (foerStige.getNummer() == 21){
 			etterStige = brettet.get(1);
 		}else if(foerStige.getNummer() == 47){
@@ -327,6 +264,7 @@ public class Brett {
 	public Rute gronnRute(Rute foerStige, Player spiller){
 		System.out.println("grønn");
 		Rute etterStige = null;
+		spiller.setTokStige(true);
 		if (foerStige.getNummer() == 6){
 			etterStige = brettet.get(15);
 		}else if(foerStige.getNummer() == 12){
@@ -362,9 +300,9 @@ public class Brett {
 	
 	//Enten opp eller ned
 	public Rute blaRute(int terningkast, Player spiller, Rute foerStige){
-		//promptEnterKey();
 		System.out.println("blå");
 		Rute etterStige;
+		spiller.setTokStige(true);
 		if (terningkast <= 3){
 			etterStige = rodRute(foerStige);
 		}else{
@@ -374,16 +312,7 @@ public class Brett {
 	}
 		
 	public void setMelding(String mld){
-		//this.melding = mld + "\n" + this.melding;
 		this.meld.add(0, mld);
-		
-		/*if(mld == 1){
-			this.melding = this.sinTur.getName() + " det er din tur. Trykk enter for � kaste terningen";
-		}else if(mld == 2){
-			this.melding = "Trykk ENTER " + sinTur.getName() + " for � flytte brikken";
-		}else if(mld == 3){
-			this.melding = "Spillet er ferdig og " + sinTur.getName() + "vant!! ^_^";
-		}*/
 	}
 	public boolean getIsGameOver(){
 		return this.isGameOver;
